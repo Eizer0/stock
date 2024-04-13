@@ -20,7 +20,12 @@ class Account:
             return False
         self.holdings[selected_stock.symbol] = self.holdings.get(selected_stock.symbol, 0) + quantity
         self.balance = round(self.balance - cost, 2)
-        self.transaction_history[selected_stock.symbol] = self.transaction_history.get(selected_stock.symbol, []) + [f"매수: {selected_stock.symbol} {quantity}주, 가격: {selected_stock.price[-1]}"]
+        transaction = f"매수: {selected_stock.symbol} {quantity}주, 가격: {selected_stock.price[-1]}"
+        self.transaction_history[selected_stock.symbol] = self.transaction_history.get(selected_stock.symbol, [])
+        self.transaction_history[selected_stock.symbol].append(transaction)
+        # 거래 내역 15개만 표시
+        if len(self.transaction_history[selected_stock.symbol]) > 15:
+            self.transaction_history[selected_stock.symbol] = self.transaction_history[selected_stock.symbol][-15:]
         return True
 
     def sell_stock(self, stock_index, quantity):
@@ -30,7 +35,12 @@ class Account:
         self.holdings[selected_stock.symbol] -= quantity
         proceeds = round(selected_stock.price[-1] * quantity, 2)
         self.balance = round(self.balance + proceeds, 2)
-        self.transaction_history[selected_stock.symbol] = self.transaction_history.get(selected_stock.symbol, []) + [f"매도: {selected_stock.symbol} {quantity}주, 가격: {selected_stock.price[-1]}"]
+        transaction = f"매도: {selected_stock.symbol} {quantity}주, 가격: {selected_stock.price[-1]}"
+        self.transaction_history[selected_stock.symbol] = self.transaction_history.get(selected_stock.symbol, [])
+        self.transaction_history[selected_stock.symbol].append(transaction)
+        # 거래 내역 15개만 표시
+        if len(self.transaction_history[selected_stock.symbol]) > 15:
+            self.transaction_history[selected_stock.symbol] = self.transaction_history[selected_stock.symbol][-15:]
         return True
 
 class Stock:
